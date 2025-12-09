@@ -1,7 +1,7 @@
 {
   "name": "yuv-py",
   "version": "3.0.0",
-  "description": "YUV.PY - A futuristic, browser-based Python environment powered by WebAssembly.",
+  "description": "YUV.PY - An advanced neural coding environment for the web.",
   "main": "index.html",
   "scripts": {
     "dev": "npx serve .",

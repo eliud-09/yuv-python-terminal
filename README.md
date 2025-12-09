@@ -1,4 +1,4 @@
-# YUV.PY // Future Terminal
+# YUV.PY // Neural Nexus
 
 ![YUV.PY Banner](screenshots/banner.png)
 
