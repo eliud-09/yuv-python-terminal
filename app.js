@@ -506,31 +506,23 @@ function generateCode() {
     let code = '';
 
     if (framework === 'pytorch') {
-        code = `# PyTorch Dimensional Neural Network
+        code = `# PyTorch Neural Network (Browser Compatible)
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import asyncio
 
-class NeuralNet(nn.Module):
+# Define Network
+class NeuralNetwork(nn.Module):
     def __init__(self):
-        super(NeuralNet, self).__init__()
-        self.layers = nn.Sequential(
-            nn.Linear(${inputSize}, ${hiddenLayers[0]?.size || outputSize}),
-            nn.${getActivationPyTorch(hiddenLayers[0]?.activation)},
-`;
-        // Hidden layers
-        for (let i = 1; i < hiddenLayers.length; i++) {
-            code += `            nn.Linear(${hiddenLayers[i - 1].size}, ${hiddenLayers[i].size}),
-            nn.${getActivationPyTorch(hiddenLayers[i].activation)},
-`;
-        }
-        // Output layer
-        code += `            nn.Linear(${hiddenLayers[hiddenLayers.length - 1]?.size || inputSize}, ${outputSize}),
-            nn.Sigmoid()
-        )
+        super(NeuralNetwork, self).__init__()
+        self.layers = nn.Module() # Container
+        # Architecture: ${inputSize} -> ${hiddenLayers.map(l => l.size).join(' -> ')} -> ${outputSize}
+        self.fc1 = nn.Linear(${inputSize}, ${hiddenLayers[0]?.size || 4})
+        ${hiddenLayers.map((l, i) => i > 0 ? `self.fc${i + 1} = nn.Linear(${hiddenLayers[i - 1].size}, ${l.size})` : '').join('\n        ')}
+        self.out = nn.Linear(${hiddenLayers[hiddenLayers.length - 1]?.size || 4}, ${outputSize})
 
     def forward(self, x):
-        return self.layers(x)
 
 # Initialize Model
 model = NeuralNet()
@@ -697,15 +689,174 @@ function loadTemplate(templateName) {
             }
         });
 
+        const MICRO_TORCH_LIB = `
+# MICRO-TORCH: A lightweight PyTorch shim for the browser (NumPy-based)
+import numpy as np
+import math
+
+class Tensor:
+    def __init__(self, data, requires_grad=False):
+        self.data = np.array(data, dtype=np.float32)
+        self.grad = None
+        self.requires_grad = requires_grad
+
+    def __repr__(self):
+        return f"tensor({self.data})"
+        
+    def backward(self):
+        pass # Autograd not fully implemented in shim
+
+    def item(self):
+        return self.data.item()
+        
+    def toList(self):
+        return self.data.tolist()
+
+def tensor(data, requires_grad=False):
+    return Tensor(data, requires_grad)
+
+def relu(x):
+    return Tensor(np.maximum(0, x.data))
+
+def sigmoid(x):
+    return Tensor(1 / (1 + np.exp(-x.data)))
+
+class Module:
+    def __init__(self):
+        self._parameters = []
+    
+    def parameters(self):
+        return self._parameters
+
+    def __call__(self, *args, **kwargs):
+        return self.forward(*args, **kwargs)
+
+class Linear(Module):
+    def __init__(self, in_features, out_features):
+        super().__init__()
+        # Kaiming initialization approximation
+        limit = math.sqrt(6 / (in_features + out_features))
+        self.weight = Tensor(np.random.uniform(-limit, limit, (out_features, in_features)), requires_grad=True)
+        self.bias = Tensor(np.zeros(out_features), requires_grad=True)
+        self._parameters.extend([self.weight, self.bias])
+        
+    def forward(self, input):
+        # input: (batch, in), weight: (out, in) -> output: (batch, out)
+        # Input might be a Tensor or numpy
+        x = input.data if isinstance(input, Tensor) else np.array(input)
+        
+        # Simple matrix multiplication: x @ W.T + b
+        res = x @ self.weight.data.T + self.bias.data
+        return Tensor(res)
+
+# Mock Optimizer
+class SGD:
+    def __init__(self, params, lr=0.01):
+        self.params = params
+        self.lr = lr
+        
+    def step(self):
+        # Mock update for demo visualization
+        for p in self.params:
+            if hasattr(p, 'data'):
+                # In a real shim we'd need gradients. 
+                # For this VISUAL DEMO, we mimic "learning" by nudging weights towards a pattern
+                # or just letting the loss function in the user code drive the visuals.
+                # Since we don't have real autograd here, we'll implement a 
+                # "Gradient Descent Simulation" where we assume gradients exist or just decay loss.
+                pass
+                
+    def zero_grad(self):
+        pass
+
+# Structure the 'torch' module
+class torch_shim:
+    def __init__(self):
+        self.Tensor = Tensor
+        self.tensor = tensor
+        self.relu = relu
+        self.sigmoid = sigmoid
+        self.float32 = np.float32
+        
+    def manual_seed(self, seed):
+        np.random.seed(seed)
+        
+    def randn(self, *size):
+        return Tensor(np.random.randn(*size))
+
+# Structure 'torch.nn'
+class nn_shim:
+    def __init__(self):
+        self.Module = Module
+        self.Linear = Linear
+        self.ReLU = lambda: (lambda x: relu(x))
+        self.Sigmoid = lambda: (lambda x: sigmoid(x))
+        self.MSELoss = lambda: (lambda pred, target: Tensor(np.mean((pred.data - target.data)**2)))
+
+# Structure 'torch.optim'
+class optim_shim:
+    def __init__(self):
+        self.SGD = SGD
+
+# Inject into sys.modules
+import sys
+from types import ModuleType
+
+# Create torch module
+m_torch = ModuleType('torch')
+torch_inst = torch_shim()
+for attr in dir(torch_inst):
+    if not attr.startswith('__'):
+        setattr(m_torch, attr, getattr(torch_inst, attr))
+
+# Create torch.nn
+m_nn = ModuleType('torch.nn')
+nn_inst = nn_shim()
+for attr in dir(nn_inst):
+    if not attr.startswith('__'):
+        setattr(m_nn, attr, getattr(nn_inst, attr))
+m_torch.nn = m_nn
+
+# Create torch.optim
+m_optim = ModuleType('torch.optim')
+optim_inst = optim_shim()
+for attr in dir(optim_inst):
+    if not attr.startswith('__'):
+        setattr(m_optim, attr, getattr(optim_inst, attr))
+m_torch.optim = m_optim
+
+sys.modules['torch'] = m_torch
+sys.modules['torch.nn'] = m_nn
+sys.modules['torch.optim'] = m_optim
+
+print("⚡ Micro-PyTorch (NumPy Shim) loaded for Browser Demo")
+`;
+
+        // Helper to inject shim if needed
+        function getAugmentedCode(code) {
+            if (code.includes('import torch')) {
+                return MICRO_TORCH_LIB + '\n\n' + code;
+            }
+            return code;
+        }
+
+        // ... (in toggleBuilder)
         // Trigger visualization if neural net
         if (templateName === 'neuralnet') {
-            neuralViz.start();
+            document.getElementById('neural-viz').style.display = 'block'; // Ensure visible
+            // Force resize next frame to ensure layout is collected
+            requestAnimationFrame(() => {
+                neuralViz.resize();
+                neuralViz.start();
+            });
+
             // Auto open builder for visibility
             if (!builderState.isOpen) {
                 toggleBuilder();
             }
         } else {
             neuralViz.stop();
+            document.getElementById('neural-viz').style.display = 'none'; // Hide cleanly
             if (builderState.isOpen) {
                 toggleBuilder(); // Close if switching away
             }
@@ -861,7 +1012,9 @@ async function runPythonCode() {
         // We wrap user code in an async execution if it contains async keywords, 
         // or just standard run. 
         // To support top-level await if user writes async code:
-        await pyodide.runPythonAsync(code);
+        // Inject Shim if needed
+        const finalCode = getAugmentedCode(code);
+        await pyodide.runPythonAsync(finalCode);
 
         // Output is handled by streaming now, so we don't need to fetch a buffer.
 

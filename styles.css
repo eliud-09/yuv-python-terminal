@@ -53,6 +53,24 @@ body {
 }
 
 /* Background Effects */
+.bg-eff#neural-viz {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 5;
+    /* increased to be above background particles but below content/builder */
+    display: none;
+    /* Hidden by default */
+}
+
+/* Make sure builder is above viz */
+.builder-panel {
+    z-index: 100 !important;
+}
+
 .bg-effects {
     position: fixed;
     top: 0;
