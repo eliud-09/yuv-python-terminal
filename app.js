@@ -13,7 +13,157 @@ function updateLineNumbers() {
 
 // ==================== Code Templates ====================
 const codeTemplates = {
-    hello: `# Hello World - YUV.PY
+    shim: `
+# MICRO-TORCH: A lightweight PyTorch shim for the browser (NumPy-based)
+import numpy as np
+import math
+
+class Tensor:
+    def __init__(self, data, requires_grad=False):
+        self.data = np.array(data, dtype=np.float32)
+        self.grad = None
+        self.requires_grad = requires_grad
+
+    def __repr__(self):
+        return f"tensor({self.data})"
+        
+    def backward(self):
+        pass # Autograd not fully implemented in shim
+
+    def item(self):
+        return self.data.item()
+        
+    def toList(self):
+        return self.data.tolist()
+
+def tensor(data, requires_grad=False):
+    return Tensor(data, requires_grad)
+
+def relu(x):
+    return Tensor(np.maximum(0, x.data))
+
+def sigmoid(x):
+    return Tensor(1 / (1 + np.exp(-x.data)))
+
+class Module:
+    def __init__(self):
+        self._parameters = []
+    
+    def parameters(self):
+        return self._parameters
+
+    def __call__(self, *args, **kwargs):
+        return self.forward(*args, **kwargs)
+
+class Linear(Module):
+    def __init__(self, in_features, out_features):
+        super().__init__()
+        # Kaiming initialization approximation
+        limit = math.sqrt(6 / (in_features + out_features))
+        self.weight = Tensor(np.random.uniform(-limit, limit, (out_features, in_features)), requires_grad=True)
+        self.bias = Tensor(np.zeros(out_features), requires_grad=True)
+        self._parameters.extend([self.weight, self.bias])
+        
+    def forward(self, input):
+        # input: (batch, in), weight: (out, in) -> output: (batch, out)
+        # Input might be a Tensor or numpy
+        x = input.data if isinstance(input, Tensor) else np.array(input)
+        
+        # Simple matrix multiplication: x @ W.T + b
+        res = x @ self.weight.data.T + self.bias.data
+        return Tensor(res)
+
+# Mock Optimizer
+class SGD:
+    def __init__(self, params, lr=0.01):
+        self.params = params
+        self.lr = lr
+        
+    def step(self):
+        # Mock update for demo visualization
+        for p in self.params:
+            if hasattr(p, 'data'):
+                # In a real shim we'd need gradients. 
+                # For this VISUAL DEMO, we mimic "learning" by nudging weights towards a pattern
+                # or just letting the loss function in the user code drive the visuals.
+                # Since we don't have real autograd here, we'll implement a 
+                # "Gradient Descent Simulation" where we assume gradients exist or just decay loss.
+                pass
+                
+    def zero_grad(self):
+        pass
+
+# Structure the 'torch' module
+class torch_shim:
+    def __init__(self):
+        self.Tensor = Tensor
+        self.tensor = tensor
+        self.relu = relu
+        self.sigmoid = sigmoid
+        self.float32 = np.float32
+        
+    def manual_seed(self, seed):
+        np.random.seed(seed)
+        
+    def randn(self, *size):
+        return Tensor(np.random.randn(*size))
+
+# Structure 'torch.nn'
+class nn_shim:
+    def __init__(self):
+        self.Module = Module
+        self.Linear = Linear
+        self.ReLU = lambda: (lambda x: relu(x))
+        self.Sigmoid = lambda: (lambda x: sigmoid(x))
+        self.MSELoss = lambda: (lambda pred, target: Tensor(np.mean((pred.data - target.data)**2)))
+
+# Structure 'torch.optim'
+class optim_shim:
+    def __init__(self):
+        self.SGD = SGD
+
+# Inject into sys.modules
+import sys
+from types import ModuleType
+
+# Create torch module
+m_torch = ModuleType('torch')
+torch_inst = torch_shim()
+for attr in dir(torch_inst):
+    if not attr.startswith('__'):
+        setattr(m_torch, attr, getattr(torch_inst, attr))
+
+# Create torch.nn
+m_nn = ModuleType('torch.nn')
+nn_inst = nn_shim()
+for attr in dir(nn_inst):
+    if not attr.startswith('__'):
+        setattr(m_nn, attr, getattr(nn_inst, attr))
+m_torch.nn = m_nn
+
+# Create torch.optim
+m_optim = ModuleType('torch.optim')
+optim_inst = optim_shim()
+for attr in dir(optim_inst):
+    if not attr.startswith('__'):
+        setattr(m_optim, attr, getattr(optim_inst, attr))
+m_torch.optim = m_optim
+
+sys.modules['torch'] = m_torch
+sys.modules['torch.nn'] = m_nn
+sys.modules['torch.optim'] = m_optim
+
+print("⚡ Micro-PyTorch (NumPy Shim) loaded for Browser Demo")
+`,
+
+    // Helper to inject shim if needed
+    function getAugmentedCode(code) {
+        // The shim is now available as a template itself, so no automatic injection here.
+        // Users should explicitly load the 'shim' template if they need it.
+        return code;
+}
+
+hello: `# Hello World - YUV.PY
 print("🐍 Welcome to YUV.PY Terminal!")
 print("Created by Yuval Avidani - GitHub Star")
 print("="*50)
@@ -64,7 +214,7 @@ print("\\nUsing Generator:")
 for num in fib_generator(10):
     print(num, end=' ')`,
 
-    sorting: `# Sorting Algorithms Demo
+        sorting: `# Sorting Algorithms Demo
 import random
 
 # Generate random list
@@ -94,7 +244,7 @@ print("\\nBubble Sort:", bubble_sort(numbers.copy()))
 print("Quick Sort:", quick_sort(numbers.copy()))
 print("Built-in Sort:", sorted(numbers))`,
 
-    datastructures: `# Data Structures in Python
+            datastructures: `# Data Structures in Python
 from collections import deque, Counter
 
 # Stack using list
@@ -129,7 +279,7 @@ print("Intersection:", set1 & set2)
 words = ["python", "ai", "python", "ai", "code"]
 print("\\nWord Count:", Counter(words))`,
 
-    decorators: `# Python Decorators
+                decorators: `# Python Decorators
 import time
 
 def timer_decorator(func):
@@ -167,7 +317,7 @@ print(f"Result: {fibonacci(10)}")
 print("\\nComputing again (cached)...")
 print(f"Result: {fibonacci(10)}")`,
 
-    comprehensions: `# List, Dict, and Set Comprehensions
+                    comprehensions: `# List, Dict, and Set Comprehensions
 
 # List Comprehension
 squares = [x**2 for x in range(10)]
@@ -195,7 +345,7 @@ print("Unique lengths:", unique_lengths)
 gen = (x**2 for x in range(1000000))
 print("\\nFirst 5 from generator:", [next(gen) for _ in range(5)])`,
 
-    classes: `# Object-Oriented Programming in Python
+                        classes: `# Object-Oriented Programming in Python
 
 class Person:
     """A class representing a person"""
@@ -232,7 +382,7 @@ print(dev.introduce())
 print(dev.code())
 print(f"\\nDeveloper object: {dev}")`,
 
-    generators: `# Python Generators - Memory Efficient Iteration
+                            generators: `# Python Generators - Memory Efficient Iteration
 
 def simple_generator():
     """A simple generator function"""
@@ -280,7 +430,7 @@ def read_large_file(filename):
 print("\\n✨ Generators are memory efficient!")
 print("They generate values on-the-fly instead of storing all in memory")`,
 
-    neuralnet: `# Neural Network Training Simulation
+                                neuralnet: `# Neural Network Training Simulation
 import random
 import asyncio
 
