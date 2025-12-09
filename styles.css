@@ -3,9 +3,11 @@
     --bg-void: #050510;
     --bg-panel: rgba(20, 20, 35, 0.6);
     --bg-panel-hover: rgba(30, 30, 50, 0.7);
-    
-    --accent-primary: #00f3ff; /* Electric Blue */
-    --accent-secondary: #bc13fe; /* Neon Purple */
+
+    --accent-primary: #00f3ff;
+    /* Electric Blue */
+    --accent-secondary: #bc13fe;
+    /* Neon Purple */
     --accent-success: #00ff9d;
     --accent-warning: #ffb800;
     --accent-error: #ff3860;
@@ -65,7 +67,7 @@ body {
 .grid-overlay {
     position: absolute;
     inset: 0;
-    background-image: 
+    background-image:
         linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 50px 50px;
@@ -99,8 +101,15 @@ body {
 }
 
 @keyframes float {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(50px, 50px); }
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(50px, 50px);
+    }
 }
 
 /* Layout */
@@ -221,8 +230,73 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Neural Visualization */
+.neural-viz-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    background: radial-gradient(circle at center, rgba(10, 10, 30, 0.8) 0%, var(--bg-void) 100%);
+}
+
+.neural-viz-container.active {
+    opacity: 1;
+}
+
+#neuralCanvas {
+    width: 100%;
+    height: 100%;
+}
+
+.viz-overlay {
+    position: absolute;
+    bottom: 40%;
+    right: 40px;
+    text-align: right;
+    font-family: var(--font-display);
+}
+
+.viz-status {
+    font-size: 1.2rem;
+    color: var(--accent-primary);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--accent-primary);
+    animation: pulse 1s infinite;
+}
+
+.viz-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.metric {
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.metric .value {
+    color: var(--accent-success);
+    margin-left: 10px;
+    font-weight: bold;
 }
 
 /* Main Content */
@@ -232,6 +306,19 @@ body {
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    z-index: 1;
+    /* Ensure content is above background but below viz if needed, wait, viz is inside main-content */
+}
+
+/* Ensure editor and terminal are above viz */
+.editor-area,
+.terminal-area,
+.top-bar {
+    z-index: 2;
+    position: relative;
+    background: rgba(5, 5, 10, 0.4);
+    /* Make slightly transparent to see viz behind */
+    backdrop-filter: blur(5px);
 }
 
 /* Top Bar */
@@ -478,9 +565,10 @@ body {
     }
 
     .nav-menu {
-        display: none; /* Hide nav on mobile for simplicity or add toggle */
+        display: none;
+        /* Hide nav on mobile for simplicity or add toggle */
     }
-    
+
     .sidebar-footer {
         display: none;
     }

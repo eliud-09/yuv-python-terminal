@@ -9,7 +9,7 @@
 
 ## 🌐 [**LIVE DEMO**](https://hoodini.github.io/yuv-python-terminal/) 🌐
 
-![YUV.PYTHON Terminal Banner](screenshots/hero.png)
+![YUV.PYTHON Terminal Banner](screenshots/desktop.png)
 
 ## ✨ What is YUV.PYTHON Terminal?
 
@@ -150,7 +150,7 @@ fibonacci(10)
 ## 🖼️ Screenshots
 
 ### Main Interface
-![Main Interface](screenshots/main-interface.png)
+![Main Interface](screenshots/desktop.png)
 
 ### Code Execution
 ![Code Execution](screenshots/execution.png)

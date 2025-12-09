@@ -278,7 +278,178 @@ def read_large_file(filename):
         yield line.strip()
 
 print("\\n✨ Generators are memory efficient!")
-print("They generate values on-the-fly instead of storing all in memory")`
+print("They generate values on-the-fly instead of storing all in memory")`,
+
+    neuralnet: `# Neural Network Training Simulation
+import random
+import time
+
+class Neuron:
+    def __init__(self):
+        self.weights = [random.uniform(-1, 1) for _ in range(3)]
+        self.bias = random.uniform(-1, 1)
+
+    def activate(self, inputs):
+        # Simple sigmoid activation simulation
+        val = sum(w * i for w, i in zip(self.weights, inputs)) + self.bias
+        return 1 / (1 + 2.71828 ** -val)
+
+class NeuralLayer:
+    def __init__(self, size):
+        self.neurons = [Neuron() for _ in range(size)]
+
+    def forward(self, inputs):
+        return [n.activate(inputs) for n in self.neurons]
+
+print("🧠 Initializing Neural Network...")
+print("Architecture: [Input(3) -> Hidden(4) -> Hidden(4) -> Output(2)]")
+time.sleep(0.5)
+
+print("\\n🔄 Starting Training Loop...")
+epochs = 5
+for i in range(epochs):
+    loss = random.uniform(0.1, 0.5) * (1 - i/epochs)
+    acc = 0.5 + (0.48 * i/epochs) + random.uniform(-0.02, 0.02)
+    
+    print(f"Epoch {i+1}/{epochs} | Loss: {loss:.4f} | Accuracy: {acc*100:.2f}%")
+    time.sleep(0.8)
+
+print("\\n✨ Training Complete!")
+print("Model ready for inference.")`
+};
+
+// ==================== Neural Visualization ====================
+const neuralViz = {
+    canvas: null,
+    ctx: null,
+    isActive: false,
+    particles: [],
+    connections: [],
+    animationId: null,
+
+    init() {
+        this.canvas = document.getElementById('neuralCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+    },
+
+    resize() {
+        if (!this.canvas) return;
+        this.canvas.width = this.canvas.parentElement.offsetWidth;
+        this.canvas.height = this.canvas.parentElement.offsetHeight;
+    },
+
+    start() {
+        if (this.isActive) return;
+        this.isActive = true;
+        document.getElementById('neural-viz').classList.add('active');
+        this.createNetwork();
+        this.animate();
+    },
+
+    stop() {
+        this.isActive = false;
+        document.getElementById('neural-viz').classList.remove('active');
+        cancelAnimationFrame(this.animationId);
+    },
+
+    createNetwork() {
+        this.particles = [];
+        this.connections = [];
+
+        // Create layers of nodes
+        const layers = [3, 5, 5, 2]; // Input, Hidden, Hidden, Output
+        const layerGap = this.canvas.width / (layers.length + 1);
+
+        layers.forEach((nodeCount, layerIndex) => {
+            const x = layerGap * (layerIndex + 1);
+            const nodeGap = this.canvas.height / (nodeCount + 1);
+
+            for (let i = 0; i < nodeCount; i++) {
+                this.particles.push({
+                    x: x,
+                    y: nodeGap * (i + 1),
+                    r: 4,
+                    layer: layerIndex,
+                    active: false,
+                    activationTimer: 0
+                });
+            }
+        });
+
+        // Create connections
+        for (let i = 0; i < this.particles.length; i++) {
+            for (let j = 0; j < this.particles.length; j++) {
+                if (this.particles[j].layer === this.particles[i].layer + 1) {
+                    this.connections.push({
+                        from: this.particles[i],
+                        to: this.particles[j],
+                        weight: Math.random(),
+                        signal: 0
+                    });
+                }
+            }
+        }
+    },
+
+    animate() {
+        if (!this.isActive) return;
+
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Update signals
+        if (Math.random() < 0.1) {
+            // Trigger input signals
+            this.particles.filter(p => p.layer === 0).forEach(p => {
+                if (Math.random() < 0.5) p.active = true;
+            });
+        }
+
+        // Draw connections
+        this.connections.forEach(conn => {
+            this.ctx.beginPath();
+            this.ctx.moveTo(conn.from.x, conn.from.y);
+            this.ctx.lineTo(conn.to.x, conn.to.y);
+
+            if (conn.signal > 0) {
+                this.ctx.strokeStyle = `rgba(0, 243, 255, ${conn.signal})`;
+                this.ctx.lineWidth = 2;
+                conn.signal -= 0.02;
+                if (conn.signal <= 0 && conn.to.layer < 3) {
+                    conn.to.active = true; // Propagate
+                }
+            } else {
+                this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+                this.ctx.lineWidth = 1;
+            }
+            this.ctx.stroke();
+
+            // Propagate signal
+            if (conn.from.active) {
+                conn.signal = 1;
+                conn.from.active = false;
+            }
+        });
+
+        // Draw nodes
+        this.particles.forEach(p => {
+            this.ctx.beginPath();
+            this.ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            this.ctx.fillStyle = p.active ? '#00f3ff' : '#ffffff';
+            this.ctx.fill();
+
+            if (p.active) {
+                this.ctx.shadowBlur = 15;
+                this.ctx.shadowColor = '#00f3ff';
+            } else {
+                this.ctx.shadowBlur = 0;
+            }
+        });
+        this.ctx.shadowBlur = 0; // Reset
+
+        this.animationId = requestAnimationFrame(() => this.animate());
+    }
 };
 
 function loadTemplate(templateName) {
@@ -287,7 +458,7 @@ function loadTemplate(templateName) {
         elements.codeEditor.value = template;
         updateLineNumbers();
         elements.codeEditor.scrollTop = 0;
-        
+
         // Update active state
         document.querySelectorAll('.nav-btn').forEach(btn => {
             if (btn.getAttribute('data-template') === templateName) {
@@ -296,6 +467,13 @@ function loadTemplate(templateName) {
                 btn.classList.remove('active');
             }
         });
+
+        // Trigger visualization if neural net
+        if (templateName === 'neuralnet') {
+            neuralViz.start();
+        } else {
+            neuralViz.stop();
+        }
     }
 }
 
@@ -315,7 +493,7 @@ const elements = {
 // Update connection status
 function updateConnectionStatus(message) {
     elements.connectionStatus.textContent = message;
-    
+
     // Update dot color based on status
     const dot = document.getElementById('connection-dot');
     if (message === 'SYSTEM READY') {
@@ -556,6 +734,9 @@ elements.codeEditor.addEventListener('keydown', (e) => {
 
 // ==================== Initialize on Load ====================
 window.addEventListener('DOMContentLoaded', () => {
+    // Initialize neural viz
+    neuralViz.init();
+
     // Initialize line numbers
     updateLineNumbers();
 

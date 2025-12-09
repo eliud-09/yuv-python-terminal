@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +12,11 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <div class="app-container">
         <!-- Sidebar -->
@@ -21,7 +25,7 @@
                 <div class="logo-glitch" data-text="YUV.PY">YUV.PY</div>
                 <div class="version-badge">v2.0</div>
             </div>
-            
+
             <nav class="nav-menu">
                 <div class="nav-section">
                     <div class="nav-label">TEMPLATES</div>
@@ -50,11 +54,8 @@
                         <button class="nav-btn" data-template="generators">
                             <span class="icon">⚡</span> Generators
                         </button>
-                        <button class="nav-btn" data-template="numpy">
-                            <span class="icon">🔢</span> NumPy
-                        </button>
-                        <button class="nav-btn" data-template="ml">
-                            <span class="icon">🧠</span> Neural Net
+                        <button class="nav-btn" data-template="neuralnet">
+                            <span class="icon">🧠</span> Neural Networks
                         </button>
                     </div>
                 </div>
@@ -70,6 +71,24 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Neural Net Visualization Overlay -->
+            <div id="neural-viz" class="neural-viz-container">
+                <canvas id="neuralCanvas"></canvas>
+                <div class="viz-overlay">
+                    <div class="viz-status">NEURAL_NET_ACTIVE</div>
+                    <div class="viz-metrics">
+                        <div class="metric">
+                            <span class="label">LOSS</span>
+                            <span class="value" id="loss-value">0.0241</span>
+                        </div>
+                        <div class="metric">
+                            <span class="label">ACCURACY</span>
+                            <span class="value" id="acc-value">98.4%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Top Bar -->
             <header class="top-bar">
                 <div class="file-info">
@@ -91,7 +110,8 @@
             <div class="editor-area">
                 <div class="editor-container">
                     <div class="line-numbers" id="lineNumbers"></div>
-                    <textarea id="codeEditor" class="code-input" spellcheck="false" placeholder="# Initialize system..."></textarea>
+                    <textarea id="codeEditor" class="code-input" spellcheck="false"
+                        placeholder="# Initialize system..."></textarea>
                 </div>
             </div>
 
@@ -127,4 +147,5 @@
     <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>
