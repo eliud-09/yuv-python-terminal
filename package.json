@@ -1,7 +1,7 @@
 {
-  "name": "browser-python",
-  "version": "1.0.0",
-  "description": "A web application that runs Python code in the browser using WebAssembly (Pyodide)",
+  "name": "yuv-py",
+  "version": "3.0.0",
+  "description": "YUV.PY - A futuristic, browser-based Python environment powered by WebAssembly.",
   "main": "index.html",
   "scripts": {
     "dev": "npx serve .",

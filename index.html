@@ -8,7 +8,7 @@
     <meta name="author" content="Yuval Avidani - YUV.AI">
     <meta property="og:title" content="YUV.PYTHON Terminal">
     <meta property="og:description" content="Run Python code in your browser with WebAssembly">
-    <title>YUV.PYTHON // Future Terminal</title>
+    <title>YUV.PY // Future Terminal</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
             <div class="brand">
                 <div class="logo-glitch" data-text="YUV.PY">YUV.PY</div>
                 <div class="brand-right">
-                    <div class="version-badge">v2.0</div>
+                    <div class="version-badge">v3.0</div>
                     <button id="mobile-menu-toggle" class="mobile-toggle">
                         <span class="icon">☰</span>
                     </button>
@@ -90,6 +90,46 @@
                             <span class="label">ACCURACY</span>
                             <span class="value" id="acc-value">98.4%</span>
                         </div>
+                    </div>
+                    <button class="action-btn primary" id="open-builder-btn"
+                        style="margin-top: 15px; width: 100%; justify-content: center;">
+                        <span class="icon">⚙️</span> BUILDER
+                    </button>
+                </div>
+            </div>
+
+            <!-- Builder Panel (Hidden by default) -->
+            <div id="builder-panel" class="builder-panel">
+                <div class="builder-header">
+                    <h3>🧠 Network Builder</h3>
+                    <div class="builder-controls">
+                        <button class="icon-btn" id="close-builder">✕</button>
+                    </div>
+                </div>
+                <div class="builder-content">
+                    <div class="layer-configuraion">
+                        <div class="config-row">
+                            <label>Input Size</label>
+                            <input type="number" id="input-size" value="3" min="1" max="10">
+                        </div>
+                        <div class="layers-list" id="layers-list">
+                            <!-- Dynamic Layers -->
+                        </div>
+                        <button class="add-layer-btn" id="add-layer-btn">+ Add Hidden Layer</button>
+                        <div class="config-row">
+                            <label>Output Size</label>
+                            <input type="number" id="output-size" value="2" min="1" max="10">
+                        </div>
+                    </div>
+                    <div class="builder-actions">
+                        <div class="framework-select">
+                            <label><input type="radio" name="framework" value="pytorch" checked> PyTorch</label>
+                            <label><input type="radio" name="framework" value="tensorflow"> TensorFlow</label>
+                            <label><input type="radio" name="framework" value="pure"> Pure Python</label>
+                        </div>
+                        <button class="action-btn primary full-width" id="generate-code-btn">
+                            <span class="icon">⚡</span> GENERATE & RUN
+                        </button>
                     </div>
                 </div>
             </div>

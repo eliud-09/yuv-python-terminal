@@ -560,15 +560,29 @@ body {
         border-bottom: 1px solid var(--border-glass);
         overflow: hidden;
         transition: height 0.3s ease;
-        position: relative;
+        position: fixed;
+        /* Fixed position to stay on top */
+        top: 0;
+        left: 0;
         z-index: 100;
+        backdrop-filter: blur(15px);
+        /* Ensure background is blurred */
     }
 
     .sidebar.active {
         height: auto;
-        max-height: 50vh;
+        max-height: 80vh;
+        /* Allow more height */
         overflow-y: auto;
-        background: rgba(10, 10, 20, 0.95);
+        background: rgba(10, 10, 20, 0.98);
+        /* Less transparent when active */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Push content down so it's not hidden behind fixed header */
+    .main-content {
+        margin-top: 60px;
+        height: calc(100vh - 60px);
     }
 
     .brand {
@@ -596,6 +610,8 @@ body {
     .nav-menu {
         display: none;
         margin-top: 20px;
+        padding-bottom: 20px;
+        /* Add padding for scroll */
     }
 
     .sidebar.active .nav-menu {
@@ -617,6 +633,152 @@ body {
 }
 
 /* Desktop Styles for Toggle */
+/* Builder Panel */
+.builder-panel {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    width: 300px;
+    background: rgba(10, 10, 25, 0.9);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: var(--spacing-md);
+    z-index: 50;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: none;
+    /* Hidden by default */
+    transform: translateX(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.builder-panel.active {
+    display: flex;
+    flex-direction: column;
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.builder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.builder-header h3 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--accent-primary);
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.icon-btn:hover {
+    color: var(--text-primary);
+}
+
+.config-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.config-row input {
+    width: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    color: var(--text-primary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.layers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: var(--spacing-md);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.layer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-glass);
+}
+
+.add-layer-btn {
+    width: 100%;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed var(--border-glass);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    margin-bottom: var(--spacing-md);
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: all 0.2s;
+}
+
+.add-layer-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.framework-select {
+    display: flex;
+    flex-wrap: wrap;
+    /* allow wrapping on small screens */
+    gap: 15px;
+    margin-bottom: var(--spacing-md);
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+}
+
+.framework-select label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.full-width {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+}
+
+/* Mobile Responsive adjustment for builder */
+@media (max-width: 768px) {
+    .builder-panel {
+        top: 70px;
+        right: 10px;
+        left: 10px;
+        width: auto;
+    }
+}
+
 .mobile-toggle {
     display: none;
 }

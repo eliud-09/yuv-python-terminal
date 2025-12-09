@@ -13,8 +13,8 @@ function updateLineNumbers() {
 
 // ==================== Code Templates ====================
 const codeTemplates = {
-    hello: `# Hello World - YUV.PYTHON
-print("🐍 Welcome to YUV.PYTHON Terminal!")
+    hello: `# Hello World - YUV.PY
+print("🐍 Welcome to YUV.PY Terminal!")
 print("Created by Yuval Avidani - GitHub Star")
 print("="*50)
 
@@ -318,7 +318,18 @@ print("\\n✨ Training Complete!")
 print("Model ready for inference.")`
 };
 
-// ==================== Neural Visualization ====================
+// ==================== Neural Network Builder & Viz ====================
+const builderState = {
+    inputSize: 3,
+    outputSize: 2,
+    hiddenLayers: [
+        { size: 4, activation: 'relu' },
+        { size: 4, activation: 'relu' }
+    ],
+    framework: 'pytorch', // pytorch, tensorflow, pure
+    isOpen: false
+};
+
 const neuralViz = {
     canvas: null,
     ctx: null,
@@ -338,6 +349,7 @@ const neuralViz = {
         if (!this.canvas) return;
         this.canvas.width = this.canvas.parentElement.offsetWidth;
         this.canvas.height = this.canvas.parentElement.offsetHeight;
+        if (this.isActive) this.createNetwork();
     },
 
     start() {
@@ -358,22 +370,31 @@ const neuralViz = {
         this.particles = [];
         this.connections = [];
 
-        // Create layers of nodes
-        const layers = [3, 5, 5, 2]; // Input, Hidden, Hidden, Output
+        // Dynamic layers based on builder state
+        const layers = [
+            builderState.inputSize,
+            ...builderState.hiddenLayers.map(l => l.size),
+            builderState.outputSize
+        ];
+
         const layerGap = this.canvas.width / (layers.length + 1);
 
         layers.forEach((nodeCount, layerIndex) => {
             const x = layerGap * (layerIndex + 1);
-            const nodeGap = this.canvas.height / (nodeCount + 1);
+            // Center nodes vertically
+            const totalHeight = this.canvas.height;
+            const nodeGap = Math.min(60, totalHeight / (nodeCount + 1)); // Cap gap size
+            const totalNodesHeight = nodeGap * (nodeCount - 1);
+            const startY = (totalHeight - totalNodesHeight) / 2;
 
             for (let i = 0; i < nodeCount; i++) {
                 this.particles.push({
                     x: x,
-                    y: nodeGap * (i + 1),
-                    r: 4,
+                    y: startY + (i * nodeGap),
+                    r: layerIndex === 0 || layerIndex === layers.length - 1 ? 6 : 4,
                     layer: layerIndex,
                     active: false,
-                    activationTimer: 0
+                    activation: 0 // For smooth glow
                 });
             }
         });
@@ -398,11 +419,13 @@ const neuralViz = {
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Update signals
+        // Randomly trigger inputs
         if (Math.random() < 0.1) {
-            // Trigger input signals
             this.particles.filter(p => p.layer === 0).forEach(p => {
-                if (Math.random() < 0.5) p.active = true;
+                if (Math.random() < 0.5) {
+                    p.active = true;
+                    p.activation = 1.0;
+                }
             });
         }
 
@@ -412,12 +435,16 @@ const neuralViz = {
             this.ctx.moveTo(conn.from.x, conn.from.y);
             this.ctx.lineTo(conn.to.x, conn.to.y);
 
+            // Signal traveling
             if (conn.signal > 0) {
                 this.ctx.strokeStyle = `rgba(0, 243, 255, ${conn.signal})`;
                 this.ctx.lineWidth = 2;
-                conn.signal -= 0.02;
-                if (conn.signal <= 0 && conn.to.layer < 3) {
-                    conn.to.active = true; // Propagate
+                conn.signal -= 0.04; // Speed
+
+                // When signal reaches destination (simulated by signal fade for now visuals)
+                // Better visual: move a dot? For now, fade is okay, but let's trigger next layer
+                if (conn.signal <= 0.1 && conn.to.layer < this.maxLayers) { // logic simplified
+                    // handled by from.active logic below
                 }
             } else {
                 this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
@@ -425,32 +452,254 @@ const neuralViz = {
             }
             this.ctx.stroke();
 
-            // Propagate signal
-            if (conn.from.active) {
+            // Propagate signal logic
+            if (conn.from.active && conn.signal <= 0) {
                 conn.signal = 1;
-                conn.from.active = false;
+                // Trigger destination after delay
+                setTimeout(() => {
+                    conn.to.active = true;
+                    conn.to.activation = 1.0;
+                }, 100);
             }
         });
 
         // Draw nodes
         this.particles.forEach(p => {
+            if (p.active) {
+                p.activation = Math.max(0, p.activation - 0.05);
+                if (p.activation <= 0) p.active = false;
+            }
+
             this.ctx.beginPath();
             this.ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            this.ctx.fillStyle = p.active ? '#00f3ff' : '#ffffff';
+
+            const alpha = 0.3 + (p.activation * 0.7);
+            const color = p.layer === 0 ? '#00f3ff' : // Input (Cyan)
+                p.layer === builderState.hiddenLayers.length + 1 ? '#bc13fe' : // Output (Purple)
+                    '#ffffff'; // Hidden (White)
+
+            this.ctx.fillStyle = p.active ? color : `rgba(255,255,255,0.2)`;
             this.ctx.fill();
 
             if (p.active) {
                 this.ctx.shadowBlur = 15;
-                this.ctx.shadowColor = '#00f3ff';
+                this.ctx.shadowColor = color;
             } else {
                 this.ctx.shadowBlur = 0;
             }
         });
-        this.ctx.shadowBlur = 0; // Reset
+        this.ctx.shadowBlur = 0;
 
         this.animationId = requestAnimationFrame(() => this.animate());
     }
 };
+
+// ==================== Code Generation ====================
+function generateCode() {
+    const { inputSize, outputSize, hiddenLayers, framework } = builderState;
+    let code = '';
+
+    if (framework === 'pytorch') {
+        code = `# PyTorch Dimensional Neural Network
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+class NeuralNet(nn.Module):
+    def __init__(self):
+        super(NeuralNet, self).__init__()
+        self.layers = nn.Sequential(
+            nn.Linear(${inputSize}, ${hiddenLayers[0]?.size || outputSize}),
+            nn.${getActivationPyTorch(hiddenLayers[0]?.activation)},
+`;
+        // Hidden layers
+        for (let i = 1; i < hiddenLayers.length; i++) {
+            code += `            nn.Linear(${hiddenLayers[i - 1].size}, ${hiddenLayers[i].size}),
+            nn.${getActivationPyTorch(hiddenLayers[i].activation)},
+`;
+        }
+        // Output layer
+        code += `            nn.Linear(${hiddenLayers[hiddenLayers.length - 1]?.size || inputSize}, ${outputSize}),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        return self.layers(x)
+
+# Initialize Model
+model = NeuralNet()
+print(model)
+
+# Dummy Data
+inputs = torch.randn(10, ${inputSize})
+targets = torch.randint(0, 2, (10, ${outputSize})).float()
+
+# Training Loop
+criterion = nn.BCELoss()
+optimizer = optim.Adam(model.parameters(), lr=0.01)
+
+print("\\nTraining for 5 epochs:")
+for epoch in range(5):
+    optimizer.zero_grad()
+    outputs = model(inputs)
+    loss = criterion(outputs, targets)
+    loss.backward()
+    optimizer.step()
+    print(f"Epoch {epoch+1}, Loss: {loss.item():.4f}")
+`;
+    } else if (framework === 'tensorflow') {
+        code = `# TensorFlow/Keras Neural Network
+import tensorflow as tf
+from tensorflow.keras import layers, models
+import numpy as np
+
+# Build Model
+model = models.Sequential()
+model.add(layers.Input(shape=(${inputSize},)))
+`;
+        hiddenLayers.forEach(layer => {
+            code += `model.add(layers.Dense(${layer.size}, activation='${layer.activation}'))\n`;
+        });
+        code += `model.add(layers.Dense(${outputSize}, activation='sigmoid'))
+
+model.summary()
+
+# Dummy Data
+X = np.random.random((100, ${inputSize}))
+y = np.random.randint(2, size=(100, ${outputSize}))
+
+# Compile & Train
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+print("\\nStarting Training...")
+history = model.fit(X, y, epochs=5, batch_size=10, verbose=1)
+`;
+    } else {
+        // Pure Python (Visual Demo support)
+        code = `# Pure Python Neural Network (No Libraries)
+import random
+import math
+
+def sigmoid(x):
+    return 1 / (1 + math.exp(-x))
+
+def sigmoid_derivative(x):
+    return x * (1 - x)
+
+class NeuralNetwork:
+    def __init__(self):
+        # Architecture: ${inputSize} -> ${hiddenLayers.map(l => l.size).join(' -> ')} -> ${outputSize}
+        self.weights = []
+        self.biases = []
+        
+        # Initialize Architecture
+        sizes = [${inputSize}, ${hiddenLayers.map(l => l.size).join(', ')}, ${outputSize}]
+        
+        for i in range(len(sizes) - 1):
+            w = [[random.uniform(-1, 1) for _ in range(sizes[i+1])] for _ in range(sizes[i])]
+            b = [random.uniform(-1, 1) for _ in range(sizes[i+1])]
+            self.weights.append(w)
+            self.biases.append(b)
+            
+    def feedforward(self, inputs):
+        self.activations = [inputs]
+        current = inputs
+        
+        for i in range(len(self.weights)):
+            w = self.weights[i]
+            b = self.biases[i]
+            next_layer = []
+            
+            for j in range(len(b)): # For each neuron in next layer
+                activation = b[j]
+                for k in range(len(current)): # Sum inputs
+                    activation += current[k] * w[k][j]
+                next_layer.append(sigmoid(activation))
+                
+            current = next_layer
+            self.activations.append(current)
+            
+        return current
+
+# Create Network
+nn = NeuralNetwork()
+print("Initialized Pure Python Network")
+print(f"Architecture: ${inputSize} inputs, ${outputSize} outputs")
+
+# Test Run
+sample_input = [random.random() for _ in range(${inputSize})]
+output = nn.feedforward(sample_input)
+print(f"\\nInput: {[f'{x:.2f}' for x in sample_input]}")
+print(f"Output: {[f'{x:.2f}' for x in output]}")
+`;
+    }
+
+    return code;
+}
+
+function getActivationPyTorch(act) {
+    if (!act) return 'ReLU()';
+    const map = { 'relu': 'ReLU()', 'sigmoid': 'Sigmoid()', 'tanh': 'Tanh()' };
+    return map[act] || 'ReLU()';
+}
+
+// ==================== Builder UI Logic ====================
+function renderBuilderLayers() {
+    const list = document.getElementById('layers-list');
+    list.innerHTML = '';
+
+    builderState.hiddenLayers.forEach((layer, index) => {
+        const item = document.createElement('div');
+        item.className = 'layer-item';
+        item.innerHTML = `
+            <span>Hidden ${index + 1}</span>
+            <div style="display:flex; gap:5px;">
+                <input type="number" value="${layer.size}" min="1" max="20" onchange="updateLayer(${index}, 'size', this.value)">
+                <select onchange="updateLayer(${index}, 'activation', this.value)" style="background:rgba(255,255,255,0.1); color:white; border:none; border-radius:4px;">
+                    <option value="relu" ${layer.activation === 'relu' ? 'selected' : ''}>ReLU</option>
+                    <option value="sigmoid" ${layer.activation === 'sigmoid' ? 'selected' : ''}>Sigmoid</option>
+                    <option value="tanh" ${layer.activation === 'tanh' ? 'selected' : ''}>Tanh</option>
+                </select>
+                <button onclick="removeLayer(${index})" style="background:none; border:none; color:#ff3860; cursor:pointer;">✕</button>
+            </div>
+        `;
+        list.appendChild(item);
+    });
+}
+
+function updateLayer(index, field, value) {
+    if (field === 'size') value = parseInt(value);
+    builderState.hiddenLayers[index][field] = value;
+    neuralViz.createNetwork(); // Live update viz
+}
+
+function removeLayer(index) {
+    builderState.hiddenLayers.splice(index, 1);
+    renderBuilderLayers();
+    neuralViz.createNetwork();
+}
+
+function addLayer() {
+    builderState.hiddenLayers.push({ size: 4, activation: 'relu' });
+    renderBuilderLayers();
+    neuralViz.createNetwork();
+}
+
+function toggleBuilder() {
+    const panel = document.getElementById('builder-panel');
+    builderState.isOpen = !builderState.isOpen;
+    if (builderState.isOpen) {
+        panel.classList.add('active');
+        renderBuilderLayers();
+    } else {
+        panel.classList.remove('active');
+    }
+}
+
+// Global exposure for inline events
+window.updateLayer = updateLayer;
+window.removeLayer = removeLayer;
+window.toggleBuilder = toggleBuilder; // expose global for easy debugging if needed, though we use event listeners mostly for buttons we can reach
+
 
 function loadTemplate(templateName) {
     const template = codeTemplates[templateName];
@@ -740,6 +989,60 @@ window.addEventListener('DOMContentLoaded', () => {
     // Initialize line numbers
     updateLineNumbers();
 
+    // Builder UI Events
+    const openBuilderBtn = document.getElementById('open-builder-btn');
+    const closeBuilderBtn = document.getElementById('close-builder');
+    const addLayerBtn = document.getElementById('add-layer-btn');
+    const generateCodeBtn = document.getElementById('generate-code-btn');
+    const inputSizeInput = document.getElementById('input-size');
+    const outputSizeInput = document.getElementById('output-size');
+
+    if (openBuilderBtn) openBuilderBtn.addEventListener('click', toggleBuilder);
+    if (closeBuilderBtn) closeBuilderBtn.addEventListener('click', toggleBuilder);
+    if (addLayerBtn) addLayerBtn.addEventListener('click', addLayer);
+
+    if (inputSizeInput) inputSizeInput.addEventListener('change', (e) => {
+        builderState.inputSize = parseInt(e.target.value);
+        neuralViz.createNetwork();
+    });
+
+    if (outputSizeInput) outputSizeInput.addEventListener('change', (e) => {
+        builderState.outputSize = parseInt(e.target.value);
+        neuralViz.createNetwork();
+    });
+
+    // Framework selection
+    document.querySelectorAll('input[name="framework"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            builderState.framework = e.target.value;
+        });
+    });
+
+    if (generateCodeBtn) {
+        generateCodeBtn.addEventListener('click', () => {
+            const code = generateCode();
+            elements.codeEditor.value = code;
+            updateLineNumbers();
+
+            // Auto run if simple python
+            if (builderState.framework === 'pure') {
+                runPythonCode();
+                if (window.innerWidth <= 768) {
+                    toggleBuilder(); // Close on mobile after run
+                }
+            } else {
+                // Just show code
+                clearOutput();
+                appendOutput('$ ', 'terminal-prompt');
+                appendOutput(`Generated ${builderState.framework} code. \n`, 'success-text');
+                appendOutput('Note: PyTorch/TensorFlow libraries are not yet fully supported in this WASM runtime.\n', 'text-secondary');
+                appendOutput('You can copy this code to your local machine, or switch to "Pure Python" to run a simulation here.\n', 'text-secondary');
+                // Close builder to see code
+                toggleBuilder();
+            }
+        });
+    }
+
     // Mobile Menu Toggle
     const mobileToggle = document.getElementById('mobile-menu-toggle');
     const sidebar = document.querySelector('.sidebar');
@@ -753,6 +1056,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // Close mobile menu when a template is selected
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            // Simply check if we are in mobile mode by checking computed style or width
             if (window.innerWidth <= 768) {
                 sidebar.classList.remove('active');
             }
