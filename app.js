@@ -740,6 +740,25 @@ window.addEventListener('DOMContentLoaded', () => {
     // Initialize line numbers
     updateLineNumbers();
 
+    // Mobile Menu Toggle
+    const mobileToggle = document.getElementById('mobile-menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    }
+
+    // Close mobile menu when a template is selected
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+            }
+        });
+    });
+
     // Set initial status
     updateConnectionStatus('INITIALIZING');
 
