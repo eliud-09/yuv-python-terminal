@@ -2,54 +2,80 @@
 
 ![YUV.PY Banner](screenshots/banner.png)
 
-**YUV.PY** is a futuristic, browser-based Python environment powered by WebAssembly (Pyodide). It brings the power of Python directly to your browser with a stunning, sci-fi inspired interface.
+Welcome to **YUV.PY**! This is a futuristic, web-based Python Playground that lets you write and run Python code directly in your browser. No complex installations, no heavy backend—just you and the code, powered by WebAssembly.
 
-## 🚀 Features
+## 🌟 What is this?
+YUV.PY is a "Terminal of the Future". It combines a beautiful, sci-fi interface with the power of Python.
+- **Run Python Instantly**: Type code and press Run. It happens right in your browser.
+- **Learn & Experiment**: Use our built-in templates to learn sorting, data structures, and more.
+- **Build AI Visually**: Use the **Neural Network Builder** to design AI models without writing boilerplate code.
 
-### 🐍 Python in the Browser
-Run real Python code instantly without any server-side setup. Powered by WebAssembly, YUV.PY delivers near-native performance right in your client.
+## 🚀 Quick Start (How to Run)
 
-### 🧠 Neural Network Builder (NEW!)
-Visually design and build neural networks with our new **No-Code Builder**.
-- **Visual Interface**: Add/Remove layers, configure sizes, and select activation functions (ReLU, Sigmoid, Tanh).
-- **Live Visualization**: See your network architecture updates in real-time with our dynamic particle system.
-- **Code Generation**: Automatically generate production-ready code for **PyTorch** and **TensorFlow**.
-- **Browser Simulation**: Run a "Pure Python" simulation of your network directly in the terminal to see it learn!
+### Method 1: The Easiest Way (VS Code)
+If you are using **Visual Studio Code**:
+1. Install the "Live Server" extension.
+2. Right-click on `index.html` and choose **"Open with Live Server"**.
+3. That's it! The app will open in your browser.
 
-### 📱 Mobile Ready
-Now fully optimized for mobile devices. Code on the go with our responsive design and touch-friendly interface.
+### Method 2: The Developer Way (Node.js)
+If you prefer using the terminal (command line):
 
-### ⚡ Templates
-Start quickly with built-in templates:
-- **Algorithms**: Fibonacci, Sorting
-- **Data Structures**: Lists, Dictionaries, Sets
-- **Advanced Python**: Decorators, Generators, Comprehensions
-- **AI/ML**: Neural Networks
+1. **Install Node.js**: Make sure you have [Node.js](https://nodejs.org/) installed.
+2. **Open Terminal**: Open your command prompt/terminal in this project folder.
+3. **Start the Server**:
+   Run this command to start a local web server:
+   ```bash
+   npx serve .
+   ```
+4. **Open in Browser**: The terminal will show a link (usually `http://localhost:3000`). Click it to open the app!
 
-## 🛠️ Usage
+> **Note**: Opening `index.html` directly (double-clicking it) might not work in some browsers due to security restrictions on WebAssembly. Please use a local server as described above.
 
-1. Open `index.html` in any modern web browser.
-2. Select a template from the sidebar.
-3. Click the **Builder** button (in Neural Net mode) to customize your AI model.
-4. Click **Run** to execute the code.
+## 🎮 How to Use
 
-## 📦 Tech Stack
-
-- **Core**: Vanilla JavaScript, HTML5, CSS3
-- **Runtime**: Pyodide (WebAssembly)
-- **Design**: Glassmorphism, Neon Effects, Responsive Grid
-
-## 📸 Screenshots
+### 1. The Terminal
+The main screen is your Python playground.
+- **Write Code**: Type Python in the editor.
+- **Run**: Click the **▶ RUN** button (or press `Ctrl+Enter`).
+- **Clear**: Click the refresh icon to clear the output.
 
 ![Main Interface](screenshots/main.png)
-*The main futuristic terminal interface.*
+
+### 2. Using Templates
+Stuck? Need inspiration?
+- Click the **Menu** icon (☰) on mobile, or check the sidebar on desktop.
+- Select a template like **Fibonacci**, **Sorting**, or **Neural Networks**.
+- The code will instantly load into the editor. Run it and see what happens!
+
+### 3. Neural Network Builder (NEW!)
+Want to build AI?
+1. Select the **Neural Networks** template 🧠.
+2. You will see a glowing network visualization.
+3. Click the **⚙️ BUILDER** button in the overlay.
+4. **Customize**:
+   - Add/Remove layers.
+   - Change layer sizes (how many "neurons").
+   - Pick activation functions (ReLU, Sigmoid, etc.).
+5. **Generate**: Click **Generate & Run**.
+   - **Pure Python**: Runs a simulation instantly in the browser.
+   - **PyTorch/TensorFlow**: Generates professional code you can copy and use in real AI projects!
 
 ![Neural Builder](screenshots/builder.png)
-*The new visual Neural Network Builder.*
+
+### 4. Mobile Experience
+YUV.PY is fully responsive. Code on your phone with a dedicated mobile view!
 
 ![Mobile View](screenshots/mobile.png)
-*Fully optimized mobile experience.*
+
+## 📦 Features Summary
+- **Zero Install**: Powered by Pyodide (WebAssembly).
+- **Responsive Design**: Works on Desktop, Tablet, and Mobile.
+- **Real Python**: Supports standard library, math, random, and more.
+- **Visual AI**: Interactive particle system visualizing neural connections.
+
+## 🤝 Contributing
+Feel free to fork this repository and submit Pull Requests. We love open source!
 
 ---
-
-*Created by Yuval Avidani - YUV.AI*
+*Created with ❤️ by Yuval Avidani - YUV.AI*
