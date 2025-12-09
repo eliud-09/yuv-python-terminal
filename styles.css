@@ -10,11 +10,22 @@
     --purple: #b877ff;
     --green: #00ff88;
     --red: #ff3366;
+    --yellow: #ffd700;
+    --orange: #ff9500;
     --text-primary: #e0e6f1;
     --text-secondary: #8b92a8;
     --text-dim: #4a5167;
     --border: rgba(0, 255, 249, 0.15);
     --border-bright: rgba(0, 255, 249, 0.5);
+
+    /* Syntax Highlighting Colors (Neon) */
+    --syntax-keyword: #ff00ff;
+    --syntax-string: #00ff88;
+    --syntax-number: #ffd700;
+    --syntax-comment: #4a5167;
+    --syntax-function: #00fff9;
+    --syntax-class: #ff9500;
+    --syntax-operator: #b877ff;
 }
 
 * {
@@ -495,6 +506,8 @@ body {
     user-select: none;
     line-height: 1.6;
     min-width: 50px;
+    white-space: pre;
+    overflow: hidden;
 }
 
 /* Code Editor */
@@ -1040,6 +1053,89 @@ kbd {
         min-width: 45px;
         justify-content: center;
     }
+}
+
+/* Syntax Highlighting */
+.code-highlight {
+    position: relative;
+    flex: 1;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    overflow: auto;
+    white-space: pre;
+}
+
+.code-highlight .keyword { color: var(--syntax-keyword); font-weight: 600; }
+.code-highlight .string { color: var(--syntax-string); }
+.code-highlight .number { color: var(--syntax-number); }
+.code-highlight .comment { color: var(--syntax-comment); font-style: italic; }
+.code-highlight .function { color: var(--syntax-function); }
+.code-highlight .class { color: var(--syntax-class); font-weight: 600; }
+.code-highlight .operator { color: var(--syntax-operator); }
+.code-highlight .builtin { color: var(--cyan); }
+
+/* Code Templates */
+.templates-section {
+    margin-bottom: 20px;
+    animation: fadeInUp 0.8s ease-out 0.3s backwards;
+}
+
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.template-btn {
+    padding: 12px 16px;
+    background: rgba(0, 255, 249, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+}
+
+.template-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: var(--cyan-glow);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+}
+
+.template-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.template-btn:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px var(--cyan-glow);
+    transform: translateY(-2px);
+}
+
+.template-icon {
+    font-size: 1.2em;
+    margin-right: 8px;
+}
+
+.template-name {
+    position: relative;
+    z-index: 1;
 }
 
 /* Utility Classes */
