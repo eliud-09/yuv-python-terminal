@@ -1,16 +1,19 @@
-# 🐍 PyWASM Terminal - Python in Your Browser
+# 🐍 YUV.PYTHON Terminal - Python in Your Browser
 
 > Execute Python code directly in your browser using WebAssembly. No installation, no backend, just pure Python power! 🚀
 
 [![Made with Python](https://img.shields.io/badge/Made%20with-Python-blue?style=for-the-badge&logo=python)](https://www.python.org/)
 [![WebAssembly](https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)](https://webassembly.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![GitHub Stars](https://img.shields.io/github/stars/hoodini/yuv-python-terminal?style=for-the-badge)](https://github.com/hoodini/yuv-python-terminal/stargazers)
 
-![PyWASM Terminal Banner](screenshots/hero.png)
+![YUV.PYTHON Terminal Banner](screenshots/hero.png)
 
-## ✨ What is PyWASM Terminal?
+## ✨ What is YUV.PYTHON Terminal?
 
-PyWASM Terminal is a **futuristic, cyberpunk-themed web application** that lets you run Python code directly in your browser using WebAssembly technology powered by [Pyodide](https://pyodide.org/). No server required, no installation needed - just open the page and start coding!
+YUV.PYTHON Terminal is a **futuristic, cyberpunk-themed web application** that lets you run Python code directly in your browser using WebAssembly technology powered by [Pyodide](https://pyodide.org/). No server required, no installation needed - just open the page and start coding!
+
+**Created by [Yuval Avidani](https://yuv.ai)** - GitHub Star, AI Builder & Speaker
 
 ### 🎯 Perfect For:
 - **Learning Python** - Great for beginners and students
@@ -33,7 +36,9 @@ PyWASM Terminal is a **futuristic, cyberpunk-themed web application** that lets 
 - 🎬 **Glitch Effects** - Cyberpunk-style title animations
 - ⚡ **Neon Glow Effects** - Electric cyan and magenta accents
 - 📺 **Scanline Effect** - Retro CRT monitor aesthetic
-- 🎯 **Line Numbers** - Professional code editor feel
+- 🎯 **Line Numbers** - Professional code editor with vertical line numbers
+- 🎨 **Syntax Highlighting** - Neon-colored Python syntax highlighting
+- 📝 **8 Code Templates** - Pre-loaded examples (Fibonacci, Sorting, OOP, etc.)
 - 📱 **Mobile Responsive** - Works perfectly on all devices
 - 🖱️ **Smooth Animations** - Polished hover effects and transitions
 
@@ -48,8 +53,8 @@ PyWASM Terminal is a **futuristic, cyberpunk-themed web application** that lets 
 
 1. **Clone or Download** this repository:
 ```bash
-git clone https://github.com/YourUsername/pywasm-terminal.git
-cd pywasm-terminal
+git clone https://github.com/hoodini/yuv-python-terminal.git
+cd yuv-python-terminal
 ```
 
 2. **Start a local web server**:
@@ -87,10 +92,26 @@ Deploy to **GitHub Pages**, **Netlify**, or **Vercel** for free:
 ### For Beginners:
 
 1. **Open the Application** - Load the page in your browser
-2. **Click "EXECUTE"** - This loads Python (first time takes 2-5 seconds)
-3. **Write Code** - Type Python code in the left panel
-4. **Run It** - Click "EXECUTE" again or press `Ctrl+Enter`
-5. **See Results** - Output appears in the right terminal panel
+2. **Try a Template** - Click any code template button to load example code
+3. **Click "EXECUTE"** - This loads Python (first time takes 2-5 seconds)
+4. **Write Code** - Type Python code in the left panel or modify templates
+5. **Run It** - Click "EXECUTE" again or press `Ctrl+Enter`
+6. **See Results** - Output appears in the right terminal panel
+
+### 📝 Built-in Code Templates:
+
+YUV.PYTHON comes with 8 ready-to-run Python examples:
+
+- 👋 **Hello World** - Get started with basics
+- 🔢 **Fibonacci** - Sequence generation with generators
+- 📊 **Sorting** - Bubble sort, quick sort, and built-in sorting
+- 🗂️ **Data Structures** - Stacks, queues, dictionaries, sets
+- ✨ **Decorators** - Function decorators and caching
+- 🎯 **Comprehensions** - List, dict, set, and generator comprehensions
+- 🏗️ **Classes & OOP** - Object-oriented programming
+- ⚡ **Generators** - Memory-efficient iteration
+
+Click any template to instantly load and run professional Python code!
 
 ### Example Code to Try:
 
@@ -207,6 +228,8 @@ Created with ❤️ by **Yuval Avidani**
 - ☁️ AWS Gen AI Superstar
 
 ### Connect with Me:
+- ⭐ GitHub: [@hoodini](https://github.com/hoodini)
+- 🌟 GitHub Stars Profile: [stars.github.com/profiles/hoodini](https://stars.github.com/profiles/hoodini/)
 - 🌐 Homepage: [yuv.ai](https://yuv.ai)
 - 💼 LinkedIn: [Yuval Avidani](https://www.linkedin.com/in/%F0%9F%8E%97%EF%B8%8Fyuval-avidani-87081474/)
 - 𝕏 Twitter: [@yuvalav](https://twitter.com/yuvalav)
