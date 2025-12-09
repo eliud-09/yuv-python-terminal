@@ -7,6 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![GitHub Stars](https://img.shields.io/github/stars/hoodini/yuv-python-terminal?style=for-the-badge)](https://github.com/hoodini/yuv-python-terminal/stargazers)
 
+## 🌐 [**LIVE DEMO**](https://hoodini.github.io/yuv-python-terminal/) 🌐
+
 ![YUV.PYTHON Terminal Banner](screenshots/hero.png)
 
 ## ✨ What is YUV.PYTHON Terminal?
