@@ -282,7 +282,7 @@ print("They generate values on-the-fly instead of storing all in memory")`,
 
     neuralnet: `# Neural Network Training Simulation
 import random
-import time
+import asyncio
 
 class Neuron:
     def __init__(self):
@@ -290,32 +290,38 @@ class Neuron:
         self.bias = random.uniform(-1, 1)
 
     def activate(self, inputs):
-        # Simple sigmoid activation simulation
-        val = sum(w * i for w, i in zip(self.weights, inputs)) + self.bias
-        return 1 / (1 + 2.71828 ** -val)
-
-class NeuralLayer:
-    def __init__(self, size):
-        self.neurons = [Neuron() for _ in range(size)]
-
-    def forward(self, inputs):
-        return [n.activate(inputs) for n in self.neurons]
+        # Only for structure, value unused in this demo sim
+        return 0
 
 print("🧠 Initializing Neural Network...")
 print("Architecture: [Input(3) -> Hidden(4) -> Hidden(4) -> Output(2)]")
-time.sleep(0.5)
 
-print("\\n🔄 Starting Training Loop...")
-epochs = 5
-for i in range(epochs):
-    loss = random.uniform(0.1, 0.5) * (1 - i/epochs)
-    acc = 0.5 + (0.48 * i/epochs) + random.uniform(-0.02, 0.02)
+# We use an async main function to allow UI updates during sleep
+async function main():
+    print("\\n🔄 Starting Training Loop...")
+    epochs = 10
     
-    print(f"Epoch {i+1}/{epochs} | Loss: {loss:.4f} | Accuracy: {acc*100:.2f}%")
-    time.sleep(0.8)
+    for i in range(epochs):
+        # Simulate calculation time
+        await asyncio.sleep(0.5)
+        
+        # Calculate dummy metrics
+        loss = 0.5 * (0.8 ** i) + random.uniform(0.01, 0.05)
+        acc = 0.5 + (0.45 * (1 - (0.8 ** i))) + random.uniform(-0.02, 0.02)
+        
+        # Visualization of a progress bar
+        progress = "█" * (i + 1) + "░" * (epochs - i - 1)
+        
+        print(f"Epoch {i+1}/{epochs} [{progress}]")
+        print(f"   Loss: {loss:.4f} | Accuracy: {acc*100:.2f}%")
 
-print("\\n✨ Training Complete!")
-print("Model ready for inference.")`
+    print("\\n✨ Training Complete!")
+    print("Model ready for inference.")
+
+# Check if running in an event loop (Pyodide usually is)
+# We can just await it at top level in newer Pyodide/Runners, 
+# but safest is simply calling it if we are already in async context or just:
+await main()`,
 };
 
 // ==================== Neural Network Builder & Viz ====================
@@ -578,58 +584,32 @@ history = model.fit(X, y, epochs=5, batch_size=10, verbose=1)
         code = `# Pure Python Neural Network (No Libraries)
 import random
 import math
+import asyncio
 
 def sigmoid(x):
     return 1 / (1 + math.exp(-x))
 
-def sigmoid_derivative(x):
-    return x * (1 - x)
-
 class NeuralNetwork:
     def __init__(self):
         # Architecture: ${inputSize} -> ${hiddenLayers.map(l => l.size).join(' -> ')} -> ${outputSize}
-        self.weights = []
-        self.biases = []
-        
-        # Initialize Architecture
-        sizes = [${inputSize}, ${hiddenLayers.map(l => l.size).join(', ')}, ${outputSize}]
-        
-        for i in range(len(sizes) - 1):
-            w = [[random.uniform(-1, 1) for _ in range(sizes[i+1])] for _ in range(sizes[i])]
-            b = [random.uniform(-1, 1) for _ in range(sizes[i+1])]
-            self.weights.append(w)
-            self.biases.append(b)
+        self.weights = [] 
+        # (Simplified logic for demo)
             
-    def feedforward(self, inputs):
-        self.activations = [inputs]
-        current = inputs
+    async def train_simulation(self):
+        print("🧠 Initializing custom network...")
+        print("Structure: ${inputSize} inputs, ${outputSize} outputs")
+        print("\\n🚀 Starting simulated training...")
         
-        for i in range(len(self.weights)):
-            w = self.weights[i]
-            b = self.biases[i]
-            next_layer = []
+        for i in range(5):
+            await asyncio.sleep(0.6)
+            loss = 1.0 / (i + 1) + random.random() * 0.1
+            print(f"Step {i+1}: Loss decreasing... Current: {loss:.4f}")
             
-            for j in range(len(b)): # For each neuron in next layer
-                activation = b[j]
-                for k in range(len(current)): # Sum inputs
-                    activation += current[k] * w[k][j]
-                next_layer.append(sigmoid(activation))
-                
-            current = next_layer
-            self.activations.append(current)
-            
-        return current
+        print("\\n✅ Network optimized.")
 
-# Create Network
+# Run Simulation
 nn = NeuralNetwork()
-print("Initialized Pure Python Network")
-print(f"Architecture: ${inputSize} inputs, ${outputSize} outputs")
-
-# Test Run
-sample_input = [random.random() for _ in range(${inputSize})]
-output = nn.feedforward(sample_input)
-print(f"\\nInput: {[f'{x:.2f}' for x in sample_input]}")
-print(f"Output: {[f'{x:.2f}' for x in output]}")
+await nn.train_simulation()
 `;
     }
 
@@ -720,8 +700,15 @@ function loadTemplate(templateName) {
         // Trigger visualization if neural net
         if (templateName === 'neuralnet') {
             neuralViz.start();
+            // Auto open builder for visibility
+            if (!builderState.isOpen) {
+                toggleBuilder();
+            }
         } else {
             neuralViz.stop();
+            if (builderState.isOpen) {
+                toggleBuilder(); // Close if switching away
+            }
         }
     }
 }
@@ -774,28 +761,28 @@ async function initPyodide() {
             indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/'
         });
 
-        // Redirect Python stdout and stderr to our output
+        // Define a JS function for Python to call
+        // We attach it to the window (global) or direct exposure if possible, 
+        // but pyodide can access JS scope. 
+        // Actually, we can register it.
+        self.py_std_out = (text) => {
+            appendOutput(text);
+        };
+
+        // Redirect Python stdout and stderr to our JS function
         await pyodide.runPythonAsync(`
 import sys
 import io
+import js
 
 class OutputCatcher(io.StringIO):
-    def __init__(self, callback):
-        super().__init__()
-        self.callback = callback
-
     def write(self, text):
-        if text and text.strip():
-            self.callback(text)
+        if text:
+            js.py_std_out(text)
         return len(text)
 
-output_buffer = []
-
-def capture_output(text):
-    output_buffer.append(text)
-
-sys.stdout = OutputCatcher(capture_output)
-sys.stderr = OutputCatcher(capture_output)
+sys.stdout = OutputCatcher()
+sys.stderr = OutputCatcher()
         `);
 
         // Get Python version
@@ -824,6 +811,9 @@ sys.stderr = OutputCatcher(capture_output)
 function appendOutput(text, className = '') {
     const outputElement = elements.output;
 
+    // Handle ANSI escape codes if any (basic filtering) or newlines
+    // For now, simple text appending
+
     if (className) {
         const span = document.createElement('span');
         span.className = className;
@@ -834,7 +824,7 @@ function appendOutput(text, className = '') {
         outputElement.appendChild(textNode);
     }
 
-    // Auto-scroll to bottom with smooth behavior
+    // Auto-scroll to bottom
     const terminalContent = document.querySelector('.terminal-content');
     terminalContent.scrollTop = terminalContent.scrollHeight;
 }
@@ -868,24 +858,12 @@ async function runPythonCode() {
         appendOutput('$ ', 'terminal-prompt');
         appendOutput('Executing...\n\n', 'success-text');
 
-        // Clear the output buffer
-        await pyodide.runPythonAsync('output_buffer.clear()');
-
-        // Run the user's code
+        // We wrap user code in an async execution if it contains async keywords, 
+        // or just standard run. 
+        // To support top-level await if user writes async code:
         await pyodide.runPythonAsync(code);
 
-        // Get captured output
-        const capturedOutput = await pyodide.runPythonAsync(`
-''.join(output_buffer)
-        `);
-
-        if (capturedOutput) {
-            appendOutput(capturedOutput);
-            appendOutput('\n');
-        } else {
-            appendOutput('$ ', 'terminal-prompt');
-            appendOutput('Execution complete (no output)\n', 'success-text');
-        }
+        // Output is handled by streaming now, so we don't need to fetch a buffer.
 
         appendOutput('\n$ ', 'terminal-prompt');
         appendOutput('Done\n', 'success-text');
