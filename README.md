@@ -50,11 +50,27 @@ Stuck? Need inspiration?
 - Select a template like **Fibonacci**, **Sorting**, or **Neural Networks**.
 - The code will instantly load into the editor. Run it and see what happens!
 
-### 3. Neural Network Builder (NEW!)
+
+## 🔰 Beginner's Guide: Your First Steps
+New to Python or just exploring? Here is the perfect path to get started:
+
+1.  **Say Hello**: 
+    -   When the app opens, you'll see a "Hello World" script.
+    -   Just hit **RUN**! You'll see the computer greet you in the terminal below.
+2.  **Learn Loops**:
+    -   Open the sidebar (or menu on mobile).
+    -   Click **Fibonacci**. 
+    -   Hit **RUN**. You'll see how Python calculates numbers in a sequence!
+3.  **Build a Brain**:
+    -   Click **Neural Networks**.
+    -   The interface will transform!
+    -   Click **Generate & Run** to train your first AI model right in the browser.
+
+### 4. Neural Network Builder (NEW!)
 Want to build AI?
 1. Select the **Neural Networks** template 🧠.
 2. You will see a glowing network visualization.
-3. Click the **⚙️ BUILDER** button in the overlay.
+3. The **Builder Panel** will open automatically.
 4. **Customize**:
    - Add/Remove layers.
    - Change layer sizes (how many "neurons").
@@ -63,9 +79,9 @@ Want to build AI?
    - **Pure Python**: Runs a simulation instantly in the browser.
    - **PyTorch/TensorFlow**: Generates professional code you can copy and use in real AI projects!
 
-![Neural Builder](screenshots/builder.png)
+![Neural Builder](screenshots/builder_v2.png)
 
-### 4. Mobile Experience
+### 5. Mobile Experience
 YUV.PY is fully responsive. Code on your phone with a dedicated mobile view!
 
 ![Mobile View](screenshots/mobile.png)

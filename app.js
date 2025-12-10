@@ -194,13 +194,13 @@ print(f"\\n🚀 You're running Python {__import__('sys').version.split()[0]} in 
 
     fibonacci: `# Fibonacci Sequence Generator
 def fibonacci(n):
-"""Generate Fibonacci sequence up to n terms"""
-a, b = 0, 1
-result = []
-for _ in range(n):
-    result.append(a)
-a, b = b, a + b
-return result
+    """Generate Fibonacci sequence up to n terms"""
+    a, b = 0, 1
+    result = []
+    for _ in range(n):
+        result.append(a)
+        a, b = b, a + b
+    return result
 
 # Generate first 15 Fibonacci numbers
 fib_numbers = fibonacci(15)
@@ -209,14 +209,14 @@ print(fib_numbers)
 
 # Using generator for memory efficiency
 def fib_generator(n):
-a, b = 0, 1
-for _ in range(n):
-    yield a
-a, b = b, a + b
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
 
 print("\\nUsing Generator:")
 for num in fib_generator(10):
-    print(num, end = ' ')`,
+    print(num, end=' ')`,
 
     sorting: `# Sorting Algorithms Demo
 import random
@@ -227,22 +227,22 @@ print("Original:", numbers)
 
 # Bubble Sort
 def bubble_sort(arr):
-n = len(arr)
-for i in range(n):
-    for j in range(0, n - i - 1):
-        if arr[j] > arr[j + 1]:
-            arr[j], arr[j + 1] = arr[j + 1], arr[j]
-return arr
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
 
 # Quick Sort
 def quick_sort(arr):
-if len(arr) <= 1:
-    return arr
-pivot = arr[len(arr) // 2]
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
     left = [x for x in arr if x < pivot]
-middle = [x for x in arr if x == pivot]
-right = [x for x in arr if x > pivot]
-return quick_sort(left) + middle + quick_sort(right)
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quick_sort(left) + middle + quick_sort(right)
 
 print("\\nBubble Sort:", bubble_sort(numbers.copy()))
 print("Quick Sort:", quick_sort(numbers.copy()))
@@ -274,8 +274,8 @@ person = {
 print("\\nPerson:", person)
 
 # Set operations
-set1 = { 1, 2, 3, 4}
-set2 = { 3, 4, 5, 6}
+set1 = {1, 2, 3, 4}
+set2 = {3, 4, 5, 6}
 print("\\nUnion:", set1 | set2)
 print("Intersection:", set1 & set2)
 
@@ -287,33 +287,33 @@ print("\\nWord Count:", Counter(words))`,
 import time
 
 def timer_decorator(func):
-"""Decorator to measure function execution time"""
-    def wrapper(* args, ** kwargs):
-start = time.time()
-result = func(* args, ** kwargs)
-end = time.time()
-print(f"⏱️ {func.__name__} took {end-start:.4f} seconds")
-return result
-return wrapper
+    """Decorator to measure function execution time"""
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"⏱️ {func.__name__} took {end-start:.4f} seconds")
+        return result
+    return wrapper
 
 def cache_decorator(func):
-"""Simple memoization decorator"""
-cache = {}
-    def wrapper(* args):
-if args in cache:
-    print(f"📦 Cache hit for {args}")
-return cache[args]
-result = func(* args)
-cache[args] = result
-return result
-return wrapper
+    """Simple memoization decorator"""
+    cache = {}
+    def wrapper(*args):
+        if args in cache:
+            print(f"📦 Cache hit for {args}")
+            return cache[args]
+        result = func(*args)
+        cache[args] = result
+        return result
+    return wrapper
 
 @timer_decorator
 @cache_decorator
 def fibonacci(n):
-if n < 2:
-    return n
-return fibonacci(n - 1) + fibonacci(n - 2)
+    if n < 2:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
 
 # Test it
 print("Computing fibonacci(10)...")
@@ -332,50 +332,50 @@ evens = [x for x in range(20) if x % 2 == 0]
 print("\\nEven numbers:", evens)
 
 # Nested comprehension
-matrix = [[i * j for j in range(5)]for i in range(5)]
+matrix = [[i * j for j in range(5)] for i in range(5)]
 print("\\nMultiplication Table:")
 for row in matrix:
     print(row)
 
 # Dictionary Comprehension
-word_lengths = { word: len(word) for word in ["python", "code", "ai"] }
+word_lengths = {word: len(word) for word in ["python", "code", "ai"]}
 print("\\nWord lengths:", word_lengths)
 
 # Set Comprehension
-unique_lengths = { len(word) for word in ["hello", "world", "hi", "code"] }
+unique_lengths = {len(word) for word in ["hello", "world", "hi", "code"]}
 print("Unique lengths:", unique_lengths)
 
-# Generator Expression(memory efficient)
+# Generator Expression (memory efficient)
 gen = (x ** 2 for x in range(1000000))
-    print("\\nFirst 5 from generator:", [next(gen) for _ in range(5)])`,
+print("\\nFirst 5 from generator:", [next(gen) for _ in range(5)])`,
 
-    classes: `# Object - Oriented Programming in Python
+    classes: `# Object-Oriented Programming in Python
 
 class Person:
-"""A class representing a person"""
+    """A class representing a person"""
 
     def __init__(self, name, age):
-self.name = name
-self.age = age
+        self.name = name
+        self.age = age
 
     def introduce(self):
-return f"Hi, I'm {self.name}, {self.age} years old"
+        return f"Hi, I'm {self.name}, {self.age} years old"
 
     def __repr__(self):
-return f"Person(name='{self.name}', age={self.age})"
+        return f"Person(name='{self.name}', age={self.age})"
 
 class Developer(Person):
-"""Developer class inheriting from Person"""
+    """Developer class inheriting from Person"""
 
     def __init__(self, name, age, language):
-super().__init__(name, age)
-self.language = language
+        super().__init__(name, age)
+        self.language = language
 
     def introduce(self):
-return f"{super().introduce()} and I code in {self.language}"
+        return f"{super().introduce()} and I code in {self.language}"
 
     def code(self):
-return f"💻 Coding in {self.language}..."
+        return f"💻 Coding in {self.language}..."
 
 # Create instances
 person = Person("Alice", 25)
@@ -389,33 +389,33 @@ print(f"\\nDeveloper object: {dev}")`,
     generators: `# Python Generators - Memory Efficient Iteration
 
 def simple_generator():
-"""A simple generator function"""
-yield 1
-yield 2
-yield 3
+    """A simple generator function"""
+    yield 1
+    yield 2
+    yield 3
 
 print("Simple generator:")
 for value in simple_generator():
     print(value)
 
 def infinite_sequence():
-"""Generate infinite sequence"""
-num = 0
-while True:
-    yield num
-num += 1
+    """Generate infinite sequence"""
+    num = 0
+    while True:
+        yield num
+        num += 1
 
 print("\\nFirst 10 from infinite sequence:")
 gen = infinite_sequence()
 for _ in range(10):
-    print(next(gen), end = ' ')
+    print(next(gen), end=' ')
 
 def fibonacci_gen():
-"""Fibonacci generator"""
-a, b = 0, 1
-while True:
-    yield a
-a, b = b, a + b
+    """Fibonacci generator"""
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
 
 print("\\n\\nFibonacci with generator:")
 fib = fibonacci_gen()
@@ -423,13 +423,13 @@ print([next(fib) for _ in range(10)])
 
 # Generator Expression
 squares = (x ** 2 for x in range(10))
-    print("\\nSquares generator:", list(squares))
+print("\\nSquares generator:", list(squares))
 
-# File reading generator(efficient for large files)
+# File reading generator (efficient for large files)
 def read_large_file(filename):
-"""Memory-efficient file reader"""
-for line in open(filename):
-    yield line.strip()
+    """Memory-efficient file reader"""
+    for line in open(filename):
+        yield line.strip()
 
 print("\\n✨ Generators are memory efficient!")
 print("They generate values on-the-fly instead of storing all in memory")`,
@@ -440,39 +440,39 @@ import asyncio
 
 class Neuron:
     def __init__(self):
-self.weights = [random.uniform(-1, 1) for _ in range(3)]
-self.bias = random.uniform(-1, 1)
+        self.weights = [random.uniform(-1, 1) for _ in range(3)]
+        self.bias = random.uniform(-1, 1)
 
     def activate(self, inputs):
         # Only for structure, value unused in this demo sim
-return 0
+        return 0
 
 print("🧠 Initializing Neural Network...")
 print("Architecture: [Input(3) -> Hidden(4) -> Hidden(4) -> Output(2)]")
 
 # We use an async main function to allow UI updates during sleep
-async function main():
+async def main():
     print("\\n🔄 Starting Training Loop...")
-epochs = 10
+    epochs = 10
 
-for i in range(epochs):
+    for i in range(epochs):
         # Simulate calculation time
-await asyncio.sleep(0.5)
+        await asyncio.sleep(0.5)
         
         # Calculate dummy metrics
-loss = 0.5 * (0.8 ** i) + random.uniform(0.01, 0.05)
-acc = 0.5 + (0.45 * (1 - (0.8 ** i))) + random.uniform(-0.02, 0.02)
+        loss = 0.5 * (0.8 ** i) + random.uniform(0.01, 0.05)
+        acc = 0.5 + (0.45 * (1 - (0.8 ** i))) + random.uniform(-0.02, 0.02)
         
         # Visualization of a progress bar
-progress = "█" * (i + 1) + "░" * (epochs - i - 1)
+        progress = "█" * (i + 1) + "░" * (epochs - i - 1)
 
-print(f"Epoch {i+1}/{epochs} [{progress}]")
-print(f"   Loss: {loss:.4f} | Accuracy: {acc*100:.2f}%")
+        print(f"Epoch {i+1}/{epochs} [{progress}]")
+        print(f"   Loss: {loss:.4f} | Accuracy: {acc*100:.2f}%")
 
-print("\\n✨ Training Complete!")
-print("Model ready for inference.")
+    print("\\n✨ Training Complete!")
+    print("Model ready for inference.")
 
-# Check if running in an event loop(Pyodide usually is)
+# Check if running in an event loop (Pyodide usually is)
 # We can just await it at top level in newer Pyodide / Runners, 
 # but safest is simply calling it if we are already in async context or just:
 await main()`,
@@ -660,7 +660,19 @@ function generateCode() {
     let code = '';
 
     if (framework === 'pytorch') {
-        code = `# PyTorch Neural Network(Browser Compatible)
+        const layersDef = hiddenLayers.map((l, i) => {
+            const prevSize = i === 0 ? inputSize : hiddenLayers[i - 1].size;
+            return `        self.fc${i + 1} = nn.Linear(${prevSize}, ${l.size})`;
+        }).join('\n');
+
+        const forwardPass = hiddenLayers.map((l, i) => {
+            const act = l.activation === 'tanh' ? 'sigmoid' : l.activation; // Fallback for shim
+            return `        x = torch.${act}(self.fc${i + 1}(x))`;
+        }).join('\n');
+
+        const lastPrevSize = hiddenLayers.length > 0 ? hiddenLayers[hiddenLayers.length - 1].size : inputSize;
+
+        code = `# PyTorch Neural Network (Browser Compatible)
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -669,17 +681,17 @@ import asyncio
 # Define Network
 class NeuralNetwork(nn.Module):
     def __init__(self):
-super(NeuralNetwork, self).__init__()
-self.layers = nn.Module() # Container
-        # Architecture: ${inputSize} -> ${hiddenLayers.map(l => l.size).join(' -> ')} -> ${outputSize}
-self.fc1 = nn.Linear(${inputSize}, ${hiddenLayers[0]?.size || 4})
-        ${hiddenLayers.map((l, i) => i > 0 ? `self.fc${i + 1} = nn.Linear(${hiddenLayers[i - 1].size}, ${l.size})` : '').join('\n        ')}
-self.out = nn.Linear(${hiddenLayers[hiddenLayers.length - 1]?.size || 4}, ${outputSize})
+        super(NeuralNetwork, self).__init__()
+${layersDef}
+        self.out = nn.Linear(${lastPrevSize}, ${outputSize})
 
     def forward(self, x):
+${forwardPass}
+        x = self.out(x)
+        return torch.sigmoid(x)
 
 # Initialize Model
-model = NeuralNet()
+model = NeuralNetwork()
 print(model)
 
 # Dummy Data
@@ -688,16 +700,16 @@ targets = torch.randint(0, 2, (10, ${outputSize})).float()
 
 # Training Loop
 criterion = nn.BCELoss()
-optimizer = optim.Adam(model.parameters(), lr = 0.01)
+optimizer = optim.Adam(model.parameters(), lr=0.01)
 
 print("\\nTraining for 5 epochs:")
 for epoch in range(5):
     optimizer.zero_grad()
-outputs = model(inputs)
-loss = criterion(outputs, targets)
-loss.backward()
-optimizer.step()
-print(f"Epoch {epoch+1}, Loss: {loss.item():.4f}")
+    outputs = model(inputs)
+    loss = criterion(outputs, targets)
+    loss.backward()
+    optimizer.step()
+    print(f"Epoch {epoch+1}, Loss: {loss.item():.4f}")
 `;
     } else if (framework === 'tensorflow') {
         code = `# TensorFlow / Keras Neural Network
@@ -707,56 +719,56 @@ import numpy as np
 
 # Build Model
 model = models.Sequential()
-model.add(layers.Input(shape = (${inputSize},)))
+model.add(layers.Input(shape=(${inputSize},)))
 `;
         hiddenLayers.forEach(layer => {
-            code += `model.add(layers.Dense(${layer.size}, activation = '${layer.activation}')) \n`;
+            code += `model.add(layers.Dense(${layer.size}, activation='${layer.activation}'))\n`;
         });
-        code += `model.add(layers.Dense(${outputSize}, activation = 'sigmoid'))
+        code += `model.add(layers.Dense(${outputSize}, activation='sigmoid'))
 
 model.summary()
 
 # Dummy Data
 X = np.random.random((100, ${inputSize}))
-y = np.random.randint(2, size = (100, ${outputSize}))
+y = np.random.randint(2, size=(100, ${outputSize}))
 
 # Compile & Train
-model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 print("\\nStarting Training...")
-history = model.fit(X, y, epochs = 5, batch_size = 10, verbose = 1)
-    `;
+history = model.fit(X, y, epochs=5, batch_size=10, verbose=1)
+`;
     } else {
         // Pure Python (Visual Demo support)
-        code = `# Pure Python Neural Network(No Libraries)
+        code = `# Pure Python Neural Network (No Libraries)
 import random
 import math
 import asyncio
 
 def sigmoid(x):
-return 1 / (1 + math.exp(-x))
+    return 1 / (1 + math.exp(-x))
 
 class NeuralNetwork:
     def __init__(self):
         # Architecture: ${inputSize} -> ${hiddenLayers.map(l => l.size).join(' -> ')} -> ${outputSize}
-self.weights = [] 
-        #(Simplified logic for demo)
+        self.weights = [] 
+        # (Simplified logic for demo)
             
     async def train_simulation(self):
-print("🧠 Initializing custom network...")
-print("Structure: ${inputSize} inputs, ${outputSize} outputs")
-print("\\n🚀 Starting simulated training...")
+        print("🧠 Initializing custom network...")
+        print("Structure: ${inputSize} inputs, ${outputSize} outputs")
+        print("\\n🚀 Starting simulated training...")
 
-for i in range(5):
-    await asyncio.sleep(0.6)
-loss = 1.0 / (i + 1) + random.random() * 0.1
-print(f"Step {i+1}: Loss decreasing... Current: {loss:.4f}")
+        for i in range(5):
+            await asyncio.sleep(0.6)
+            loss = 1.0 / (i + 1) + random.random() * 0.1
+            print(f"Step {i+1}: Loss decreasing... Current: {loss:.4f}")
 
-print("\\n✅ Network optimized.")
+        print("\\n✅ Network optimized.")
 
 # Run Simulation
 nn = NeuralNetwork()
 await nn.train_simulation()
-    `;
+`;
     }
 
     return code;
@@ -1082,9 +1094,9 @@ import js
 
 class OutputCatcher(io.StringIO):
     def write(self, text):
-if text:
-    js.py_std_out(text)
-return len(text)
+        if text:
+            js.py_std_out(text)
+        return len(text)
 
 sys.stdout = OutputCatcher()
 sys.stderr = OutputCatcher()
